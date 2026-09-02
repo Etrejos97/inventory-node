@@ -12,6 +12,7 @@ export const itemSchema = z.object({
   location: z.string().nullable().optional(),
   purchaseValue: z.number().nullable().optional(),
   observations: z.string().nullable().optional(),
+  imageUrl: z.string().nullable().optional(),
   stock: z.number().nullable().optional(),
   minStock: z.number().nullable().optional(),
 });

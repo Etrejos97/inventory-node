@@ -46,13 +46,32 @@ una desviación consciente del original, documentada en el ADR
 Probé los tres casos con el server real levantado (duplicado, delete
 bloqueado, happy path) antes de dar el cambio por bueno.
 
+Agregué imagen real por item (`imageUrl`, string opcional). Antes de
+tocar código confirmé contra `Item.java` del original que nunca tuvo
+campo de imagen — no era una brecha de contrato, es una feature nueva,
+así que pasó por `specs/002-item-image-url/` y quedó documentada en el
+ADR `docs/decisiones/2026-09-02 — imageUrl opcional en Item.md`. Toqué
+schema + migración + validador + mapper + los dos route handlers de
+items, y en el frontend `ItemForm` (campo nuevo), `ProductCard` y el
+carrito (imagen real con fallback al emoji si no hay `imageUrl` o si la
+URL no carga — le agregué `onError` después de verificar visualmente con
+el navegador que sin eso quedaba el ícono de imagen rota). Verificado con
+curl y con capturas de pantalla reales (imagen cargando, fallback por URL
+rota, fallback por ausencia de imagen).
+
+El campo y la UI ya funcionan, pero el seed nunca tuvo URLs de imagen, así
+que ahora mismo ningún item las tiene cargadas — sigo poblando
+`prisma/seed.ts` con fotos reales de los 15 productos.
+
 ## Próximos pasos
 
 1. Testing: lo dejo en pausa hasta que el profesor indique el enfoque a
    seguir. Cuando arranque: instalar el framework que corresponda,
    actualizar `docs/CONSTITUTION.md` §6 y `docs/DEUDA.md` (la sección "Sin
    tests, sin CI" queda obsoleta ahí).
-2. Si en algún momento quiero correr frontend+backend juntos con Docker o
+2. Terminar de poblar `imageUrl` en los 15 items del seed con fotos
+   reales — en curso.
+3. Si en algún momento quiero correr frontend+backend juntos con Docker o
    desplegarlos, revisar `docs/decisiones/` antes de tocar la capa de
    datos (Prisma+SQLite) o el manejo de errores (404 real, shape propio).
 

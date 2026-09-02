@@ -5,6 +5,7 @@ const EMPTY = {
   name: '', description: '', serialNumber: '',
   categoryId: '', statusId: '1',
   acquisitionDate: '', location: '', purchaseValue: '', observations: '',
+  imageUrl: '',
   stock: '', minStock: '',
 };
 
@@ -38,6 +39,7 @@ export default function ItemForm({ item, onSave, onCancel }) {
         location: item.location || '',
         purchaseValue: item.purchaseValue?.toString() || '',
         observations: item.observations || '',
+        imageUrl: item.imageUrl || '',
         stock: item.stock?.toString() || '',
         minStock: item.minStock?.toString() || '',
       });
@@ -144,6 +146,12 @@ export default function ItemForm({ item, onSave, onCancel }) {
               <input type="number" min="0" name="minStock"
                      value={form.minStock} onChange={handleChange}
                      placeholder="Alerta bajo stock" />
+            </div>
+
+            <div className="form-group full">
+              <label>URL de imagen</label>
+              <input type="url" name="imageUrl" value={form.imageUrl} onChange={handleChange}
+                     placeholder="https://..." />
             </div>
 
             <div className="form-group full">

@@ -56,6 +56,7 @@ export async function POST(request: NextRequest) {
         location: data.location,
         purchaseValue: data.purchaseValue,
         observations: data.observations,
+        imageUrl: data.imageUrl,
         stock: data.stock ?? 0,
         minStock: data.minStock ?? 0,
       },

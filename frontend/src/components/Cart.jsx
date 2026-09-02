@@ -4,6 +4,14 @@ import { useCart } from '../context/CartContext';
 const formatCurrency = (v) =>
   v != null ? `$${Number(v).toLocaleString('es-CO')}` : '$0';
 
+function CartItemThumb({ item }) {
+  const [imgFailed, setImgFailed] = useState(false);
+  if (item.imageUrl && !imgFailed) {
+    return <img src={item.imageUrl} alt={item.name} onError={() => setImgFailed(true)} />;
+  }
+  return '🖥️';
+}
+
 export default function Cart({ open, onClose }) {
   const { items, removeItem, updateQuantity, clearCart, totalItems, totalValue } = useCart();
   const [showQuote, setShowQuote] = useState(false);
@@ -58,7 +66,9 @@ export default function Cart({ open, onClose }) {
             ) : (
               items.map((item) => (
                 <div key={item.id} className="cart-item">
-                  <div className="cart-item-thumb">🖥️</div>
+                  <div className="cart-item-thumb">
+                    <CartItemThumb item={item} />
+                  </div>
                   <div className="cart-item-info">
                     <p className="cart-item-name">{item.name}</p>
                     <p className="cart-item-category">{item.categoryName}</p>

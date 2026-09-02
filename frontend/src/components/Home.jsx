@@ -4,6 +4,7 @@ import { useCart } from '../context/CartContext';
 
 function ProductCard({ item }) {
   const { addItem } = useCart();
+  const [imgFailed, setImgFailed] = useState(false);
 
   const formatCurrency = (v) =>
     v != null ? `$${Number(v).toLocaleString('es-CO')}` : null;
@@ -22,7 +23,11 @@ function ProductCard({ item }) {
   return (
     <div className="product-card">
       <div className="product-card__image">
-        <span className="product-card__emoji">🖥️</span>
+        {item.imageUrl && !imgFailed ? (
+          <img src={item.imageUrl} alt={item.name} onError={() => setImgFailed(true)} />
+        ) : (
+          <span className="product-card__emoji">🖥️</span>
+        )}
       </div>
       <div className="product-card__body">
         <h3 className="product-card__name">{item.name}</h3>

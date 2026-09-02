@@ -24,6 +24,7 @@ export function toItemResponse(item: ItemWithRelations) {
     location: item.location,
     purchaseValue: decimalToNumber(item.purchaseValue),
     observations: item.observations,
+    imageUrl: item.imageUrl,
     stock: item.stock,
     minStock: item.minStock,
     createdAt: formatDateTime(item.createdAt),
