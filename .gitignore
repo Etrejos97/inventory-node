@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Next.js build output
+.next/
+out/
+
+# Variables de entorno (queda .env.example como plantilla)
+.env
+.env.local
+.env.*.local
+
+# SQLite
+*.db
+*.db-journal
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Config MCP local (ruta absoluta específica de esta máquina)
+.mcp.json
