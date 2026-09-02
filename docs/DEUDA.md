@@ -54,7 +54,9 @@ Prisma libere una versión estable que la traiga arreglada.
 
 Prisma no envuelve cada `create`/`update` en una transacción salvo que la
 pida explícito. El Java original sí usa `@Transactional` en sus servicios.
-Para el alcance de un CRUD de un solo insert/update por request esto no
-cambia el comportamiento observable, pero si más adelante agrego un
-endpoint que escriba en más de una tabla a la vez, ahí sí hace falta
-`prisma.$transaction`.
+
+Revisé los 15 puntos de escritura del backend (`create`/`update`/`delete`
+en los ocho grupos de endpoints) y cada uno toca un solo modelo por
+request — ninguno necesita `prisma.$transaction` hoy. Si en algún momento
+agrego un endpoint que escriba en más de una tabla a la vez (por ejemplo,
+mover stock entre dos items), ahí sí hace falta envolver la operación.
