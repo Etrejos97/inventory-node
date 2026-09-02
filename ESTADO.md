@@ -59,9 +59,15 @@ el navegador que sin eso quedaba el ícono de imagen rota). Verificado con
 curl y con capturas de pantalla reales (imagen cargando, fallback por URL
 rota, fallback por ausencia de imagen).
 
-El campo y la UI ya funcionan, pero el seed nunca tuvo URLs de imagen, así
-que ahora mismo ningún item las tiene cargadas — sigo poblando
-`prisma/seed.ts` con fotos reales de los 15 productos.
+Poblé `imageUrl` en los 15 items: busqué la foto real de cada producto,
+verifiqué cada URL dos veces por separado (una vez el agente que hizo la
+búsqueda, otra vez yo mismo con `curl -sI` y un User-Agent de navegador)
+antes de confiar en ninguna — hubo una URL de un dominio que no
+reconocía (`media.lenovonews.fiestic.com`, el press kit de Lenovo en un
+CDN de terceros) que verifiqué con la misma exigencia que las demás.
+Actualicé `prisma/seed.ts` (para siembras futuras desde cero) y los 15
+items que ya estaban en `dev.db` con un script puntual. Confirmé
+visualmente en el navegador: las 15 imágenes cargan bien.
 
 ## Próximos pasos
 
@@ -69,11 +75,13 @@ que ahora mismo ningún item las tiene cargadas — sigo poblando
    seguir. Cuando arranque: instalar el framework que corresponda,
    actualizar `docs/CONSTITUTION.md` §6 y `docs/DEUDA.md` (la sección "Sin
    tests, sin CI" queda obsoleta ahí).
-2. Terminar de poblar `imageUrl` en los 15 items del seed con fotos
-   reales — en curso.
-3. Si en algún momento quiero correr frontend+backend juntos con Docker o
+2. Si en algún momento quiero correr frontend+backend juntos con Docker o
    desplegarlos, revisar `docs/decisiones/` antes de tocar la capa de
    datos (Prisma+SQLite) o el manejo de errores (404 real, shape propio).
+3. Algunas URLs de imagen (Razer, Logitech, Lenovo, Sony) están en CDNs
+   alternos del fabricante, no en su dominio principal — si alguna se cae
+   más adelante, está anotado el motivo en el comentario de
+   `prisma/seed.ts`.
 
 ## Bloqueos
 

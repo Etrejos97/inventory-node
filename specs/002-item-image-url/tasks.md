@@ -18,8 +18,7 @@
 - [x] Verificación visual en navegador (con imagen real, con URL rota
       cayendo al emoji, y sin imagen)
 
-## Pendiente (fuera de este spec)
-
-Poblar `imageUrl` en los 15 items del seed con fotos reales de cada
-producto — ver `prisma/seed.ts` y el ADR. El campo y la UI ya funcionan;
-falta cargar los datos.
+- [x] Poblar `imageUrl` en los 15 items del seed con fotos reales
+      (verificadas con `curl -sI`, confirmadas visualmente en el
+      navegador) — `prisma/seed.ts` y los 15 items ya existentes en
+      `dev.db`.
