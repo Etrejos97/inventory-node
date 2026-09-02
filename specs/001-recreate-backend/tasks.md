@@ -15,7 +15,7 @@
 - [x] Limpiar scaffold de UI por defecto (`page.tsx`, `layout.tsx`, css)
 - [x] `frontend/` copiado del repo original tal cual
 - [x] `git init` propio, rama `main`
-- [ ] Primer commit
+- [x] Primer commit
 
 ## Fase 2 — Prisma schema
 - [x] 7 modelos, relaciones, `@map` a snake_case, `purchaseValue` como `Decimal`

@@ -1,14 +1,14 @@
 # Estado activo
 
-**Última actualización**: 2026-08-31.
+**Última actualización**: 2026-09-02.
 
 ## Qué hice
 
 Recreé el backend de `inventory-fullstack` (Spring Boot) con Node.js +
-Next.js + Prisma/SQLite, siguiendo `specs/001-recreate-backend/`. Duplicué
+Next.js + Prisma/SQLite, siguiendo `specs/001-recreate-backend/`. Duplico
 también el frontend original en `frontend/` (decisión explícita, no solo
 re-apuntar su proxy), así el proyecto queda independiente del repo
-original — que no toqué para nada.
+original — que no toco para nada.
 
 Los 8 grupos de endpoints están completos y verificados contra el
 contrato: auth, items (con filtros), categorías, estados, responsables,
@@ -17,19 +17,24 @@ heredadas documentadas en `docs/DEUDA.md` (password expuesto, `"changeme"`
 solo en `null`, `isActive` forzado a `true` en el PUT de responsables,
 `MovementHistory` sin escritura).
 
-Verificación hecha: batería completa de `curl.exe` por endpoint, `tsc
---noEmit` y `npm run lint` sin errores, y una pasada real en el navegador
-(Playwright) contra el frontend duplicado — login con `admin/admin123`,
-dashboard admin, tabla de inventario con los 15 items del seed, todo
-correcto.
+Indexé el repo con `codebase-memory-mcp` (565 nodos / 1146 aristas) y dejé
+la regla de usarlo para mapear y revisar archivos en `CLAUDE.md`.
+
+Hice el primer commit y publiqué el repo en GitHub, público, bajo mi
+cuenta personal: [github.com/Etrejos97/inventory-node](https://github.com/Etrejos97/inventory-node).
+Antes de ese commit revisé `.gitignore` para que `node_modules/`, `.next/`,
+`prisma/dev.db` y `.env` quedaran fuera del repo (`.env.example` sí queda,
+como plantilla). También completé el `README.md` (stack, estructura, tabla
+de los 19 endpoints) y agregué `docs/arquitectura.md` con el diagrama de
+capas real, extraído del grafo indexado.
 
 ## Próximos pasos
 
-1. Primer commit (todavía no lo hice — no se pidió explícitamente).
-2. Cuando arranque la práctica de testing sobre este proyecto: instalar
-   el framework que corresponda, actualizar `docs/CONSTITUTION.md` §6 y
-   `docs/DEUDA.md` (la sección "Sin tests, sin CI" queda obsoleta ahí).
-3. Si en algún momento quiero correr frontend+backend juntos con Docker o
+1. Testing: lo dejo en pausa hasta que el profesor indique el enfoque a
+   seguir. Cuando arranque: instalar el framework que corresponda,
+   actualizar `docs/CONSTITUTION.md` §6 y `docs/DEUDA.md` (la sección "Sin
+   tests, sin CI" queda obsoleta ahí).
+2. Si en algún momento quiero correr frontend+backend juntos con Docker o
    desplegarlos, revisar `docs/decisiones/` antes de tocar la capa de
    datos (Prisma+SQLite) o el manejo de errores (404 real, shape propio).
 
@@ -54,7 +59,12 @@ Ninguno.
 - **`npm audit fix`** aplicado en `frontend/` (6 vulnerabilidades, todas
   resueltas con bumps no destructivos) — es la copia, no el original, así
   que no hay problema en mantenerla al día.
+- **Repo publicado bajo cuenta personal** (`Etrejos97`), no la de trabajo
+  (`EtrejosMeper`/MEPER) — el `git config` global de esta máquina apunta a
+  la cuenta de trabajo, así que dejé el autor configurado en local
+  (`git config --local`) solo para este repo, sin tocar el global.
 
 ## Estado git
 
-Repo propio (`git init`, rama `main`), sin commits todavía.
+Repo con remoto en GitHub (`origin` → `github.com/Etrejos97/inventory-node`,
+público), rama `main`, 1 commit.
