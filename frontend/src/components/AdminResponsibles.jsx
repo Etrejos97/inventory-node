@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { CheckCircle2, XCircle } from 'lucide-react';
 import { adminService } from '../api/adminService';
 import DataTable from './DataTable';
 import ModalForm from './ModalForm';
@@ -9,7 +10,13 @@ const COLUMNS = [
   { key: 'position', label: 'Cargo' },
   { key: 'email', label: 'Email' },
   { key: 'phone', label: 'Teléfono' },
-  { key: 'isActive', label: 'Activo', render: (r) => (r.isActive ? '✅' : '❌') },
+  {
+    key: 'isActive',
+    label: 'Activo',
+    render: (r) => (r.isActive
+      ? <CheckCircle2 size={18} style={{ color: 'var(--neon-green)' }} />
+      : <XCircle size={18} style={{ color: 'var(--text-muted)' }} />),
+  },
 ];
 
 const FIELD_DEFS = [

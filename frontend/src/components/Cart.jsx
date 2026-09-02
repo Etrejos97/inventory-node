@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { X, CheckCircle2, ShoppingCart, Trash2, ClipboardList, Monitor } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 
 const formatCurrency = (v) =>
@@ -9,7 +10,7 @@ function CartItemThumb({ item }) {
   if (item.imageUrl && !imgFailed) {
     return <img src={item.imageUrl} alt={item.name} onError={() => setImgFailed(true)} />;
   }
-  return '🖥️';
+  return <Monitor size={22} />;
 }
 
 export default function Cart({ open, onClose }) {
@@ -39,7 +40,7 @@ export default function Cart({ open, onClose }) {
       <div className="cart-sidebar">
         <div className="cart-header">
           <h2>Carrito <span>({totalItems})</span></h2>
-          <button className="btn-icon" onClick={onClose}>✕</button>
+          <button className="btn-icon" onClick={onClose}><X size={18} /></button>
         </div>
 
         {quoteSent ? (
@@ -47,7 +48,7 @@ export default function Cart({ open, onClose }) {
             flex: 1, display: 'flex', flexDirection: 'column',
             alignItems: 'center', justifyContent: 'center', padding: '2rem', textAlign: 'center',
           }}>
-            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>✅</div>
+            <div style={{ color: 'var(--neon-green)', marginBottom: '1rem' }}><CheckCircle2 size={48} /></div>
             <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.5rem', color: 'var(--neon-green)' }}>
               ¡Cotización solicitada!
             </h3>
@@ -59,7 +60,7 @@ export default function Cart({ open, onClose }) {
           <div className="cart-items">
             {items.length === 0 ? (
               <div className="cart-empty">
-                <div className="cart-empty-icon">🛒</div>
+                <div className="cart-empty-icon"><ShoppingCart size={48} /></div>
                 <p>El carrito está vacío</p>
                 <p style={{ fontSize: '0.8rem', marginTop: '0.25rem' }}>Agrega productos desde la tienda</p>
               </div>
@@ -89,7 +90,7 @@ export default function Cart({ open, onClose }) {
                         className="cart-item-remove"
                         onClick={() => removeItem(item.id)}
                         title="Eliminar"
-                      >🗑️</button>
+                      ><Trash2 size={14} /></button>
                     </div>
                   </div>
                 </div>
@@ -120,7 +121,7 @@ export default function Cart({ open, onClose }) {
       {showQuote && (
         <div className="modal-overlay" onClick={() => setShowQuote(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()} style={{ maxWidth: 480 }}>
-            <h2>📋 Resumen de cotización</h2>
+            <h2 className="icon-inline"><ClipboardList size={20} /> Resumen de cotización</h2>
             <div style={{ marginBottom: '1rem' }}>
               {items.map((item) => (
                 <div key={item.id} style={{
@@ -152,8 +153,8 @@ export default function Cart({ open, onClose }) {
               <button className="btn btn-secondary" onClick={() => setShowQuote(false)}>
                 Cancelar
               </button>
-              <button className="btn btn-primary" onClick={confirmQuote}>
-                ✅ Confirmar cotización
+              <button className="btn btn-primary icon-inline" onClick={confirmQuote}>
+                <CheckCircle2 size={16} /> Confirmar cotización
               </button>
             </div>
           </div>

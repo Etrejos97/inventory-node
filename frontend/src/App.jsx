@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Zap, ShoppingCart } from 'lucide-react';
 import { CartProvider, useCart } from './context/CartContext';
 import Home from './components/Home';
 import ItemList from './components/ItemList';
@@ -63,8 +64,8 @@ function AppContent() {
   return (
     <div className="app">
       <nav className="navbar">
-        <h1 onClick={() => setPage(user ? 'inventory' : 'home')}>
-          ⚡ INVENTORY
+        <h1 className="icon-inline" onClick={() => setPage(user ? 'inventory' : 'home')}>
+          <Zap size={20} /> INVENTORY
         </h1>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
           {!user && (
@@ -120,7 +121,7 @@ function AppContent() {
             }}
             onClick={() => setCartOpen(true)}
           >
-            🛒
+            <ShoppingCart size={18} />
             {totalItems > 0 && (
               <span style={{
                 position: 'absolute',

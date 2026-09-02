@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Zap, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { authService } from '../api/authService';
 
 export default function Login({ onLogin, onBack }) {
@@ -28,7 +29,7 @@ export default function Login({ onLogin, onBack }) {
     <div className="login-container">
       <div className="login-card">
         <div className="login-header">
-          <div className="login-logo">⚡</div>
+          <div className="login-logo"><Zap size={40} /></div>
           <h2 className="login-title">
             <span>Inventory</span>
           </h2>
@@ -85,7 +86,7 @@ export default function Login({ onLogin, onBack }) {
                 title={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
                 tabIndex={-1}
               >
-                {showPassword ? '👁️' : '👁️‍🗨️'}
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
           </div>
@@ -103,11 +104,11 @@ export default function Login({ onLogin, onBack }) {
         {onBack && (
           <div style={{ textAlign: 'center', marginTop: '1rem' }}>
             <button
-              className="btn btn-secondary"
+              className="btn btn-secondary icon-inline"
               onClick={onBack}
               style={{ width: '100%', justifyContent: 'center' }}
             >
-              ← Volver al inicio
+              <ArrowLeft size={16} /> Volver al inicio
             </button>
           </div>
         )}

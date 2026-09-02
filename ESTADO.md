@@ -69,6 +69,20 @@ Actualicé `prisma/seed.ts` (para siembras futuras desde cero) y los 15
 items que ya estaban en `dev.db` con un script puntual. Confirmé
 visualmente en el navegador: las 15 imágenes cargan bien.
 
+Reemplacé los ~50 emojis del frontend por íconos de `lucide-react` — no
+combinaban con el look "neon" oscuro del proyecto y eran inconsistentes
+entre sistemas. Es un cambio puramente visual del frontend duplicado, no
+toca el backend ni el contrato, así que no le apliqué la metodología de
+`specs/` (esa es para features/contrato). Toqué los 10 componentes que
+tenían emojis más `index.css` (clase `.icon-inline` nueva para
+ícono+texto en línea). Confirmé con grep que no quedó ningún emoji
+suelto en `frontend/src`, y verifiqué visualmente en el navegador: home
+pública, login, inventario, dashboard admin con sus tabs, y el flujo
+completo del carrito (agregar, thumb, cerrar, eliminar, cotización,
+confirmación) — todos los íconos se ven del tamaño y color correctos,
+heredando `currentColor` de las variables `--neon-*` ya existentes sin
+tocar esas reglas de CSS.
+
 ## Próximos pasos
 
 1. Testing: lo dejo en pausa hasta que el profesor indique el enfoque a

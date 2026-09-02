@@ -1,3 +1,5 @@
+import { Pencil, Trash2 } from 'lucide-react';
+
 export default function DataTable({ columns, items, onEdit, onDelete, emptyText }) {
   return (
     <div className="table-container">
@@ -26,8 +28,8 @@ export default function DataTable({ columns, items, onEdit, onDelete, emptyText 
                   </td>
                 ))}
                 <td>
-                  <button className="btn-icon" title="Editar" onClick={() => onEdit(item)}>✏️</button>
-                  <button className="btn-icon" title="Eliminar" onClick={() => onDelete(item)}>🗑️</button>
+                  <button className="btn-icon" title="Editar" onClick={() => onEdit(item)}><Pencil size={16} /></button>
+                  <button className="btn-icon" title="Eliminar" onClick={() => onDelete(item)}><Trash2 size={16} /></button>
                 </td>
               </tr>
             ))

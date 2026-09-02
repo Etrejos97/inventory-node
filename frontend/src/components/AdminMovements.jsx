@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { RefreshCw } from 'lucide-react';
 import { adminService } from '../api/adminService';
 
 const ACTION_LABELS = {
@@ -35,7 +36,7 @@ export default function AdminMovements() {
     <div>
       <div className="toolbar">
         <h2>Historial de movimientos</h2>
-        <button className="btn btn-secondary" onClick={load}>🔄 Actualizar</button>
+        <button className="btn btn-secondary icon-inline" onClick={load}><RefreshCw size={16} /> Actualizar</button>
       </div>
       {error && <div className="error-message">{error}</div>}
       <div className="table-container">

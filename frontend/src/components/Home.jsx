@@ -1,6 +1,17 @@
 import { useState, useEffect } from 'react';
+import {
+  CheckCircle2, User, Wrench, Ban, Package, AlertTriangle,
+  ShoppingCart, Flame, Gamepad2, Truck, Lock, MessageCircle, Star, Monitor,
+} from 'lucide-react';
 import { itemService, categoryService } from '../api/axiosConfig';
 import { useCart } from '../context/CartContext';
+
+const STATUS_ICON = {
+  Disponible: CheckCircle2,
+  'En uso': User,
+  'En mantenimiento': Wrench,
+  'Dado de baja': Ban,
+};
 
 function ProductCard({ item }) {
   const { addItem } = useCart();
@@ -9,16 +20,10 @@ function ProductCard({ item }) {
   const formatCurrency = (v) =>
     v != null ? `$${Number(v).toLocaleString('es-CO')}` : null;
 
-  const statusIcon = {
-    Disponible: '✅',
-    'En uso': '👤',
-    'En mantenimiento': '🔧',
-    'Dado de baja': '🚫',
-  };
-
   const stock = item.stock ?? 0;
   const isAvailable = item.statusName === 'Disponible' && stock > 0;
   const isLow = isAvailable && item.minStock != null && stock > 0 && stock <= item.minStock;
+  const StatusIcon = STATUS_ICON[item.statusName] || Package;
 
   return (
     <div className="product-card">
@@ -26,7 +31,7 @@ function ProductCard({ item }) {
         {item.imageUrl && !imgFailed ? (
           <img src={item.imageUrl} alt={item.name} onError={() => setImgFailed(true)} />
         ) : (
-          <span className="product-card__emoji">🖥️</span>
+          <span className="product-card__emoji"><Monitor size={64} /></span>
         )}
       </div>
       <div className="product-card__body">
@@ -36,8 +41,8 @@ function ProductCard({ item }) {
         )}
         <div className="product-card__meta">
           <span className="product-card__category">{item.categoryName}</span>
-          <span className="product-card__status">
-            {statusIcon[item.statusName] || '📦'} {item.statusName}
+          <span className="product-card__status icon-inline">
+            <StatusIcon size={14} /> {item.statusName}
           </span>
         </div>
         {item.purchaseValue && (
@@ -45,8 +50,8 @@ function ProductCard({ item }) {
         )}
         <div className="product-card__footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           {stock > 0 ? (
-            <span className="product-card__serial" style={{ color: isLow ? 'var(--neon-orange)' : 'var(--neon-green)' }}>
-              {stock} en stock{isLow ? ' ⚠️' : ''}
+            <span className="product-card__serial icon-inline" style={{ color: isLow ? 'var(--neon-orange)' : 'var(--neon-green)' }}>
+              {stock} en stock{isLow && <AlertTriangle size={13} />}
             </span>
           ) : (
             <span className="product-card__serial" style={{ color: 'var(--neon-pink)' }}>Agotado</span>
@@ -56,12 +61,14 @@ function ProductCard({ item }) {
           )}
         </div>
         <button
-          className={`btn ${isAvailable ? 'btn-primary' : 'btn-secondary'}`}
+          className={`btn ${isAvailable ? 'btn-primary' : 'btn-secondary'} icon-inline`}
           style={{ width: '100%', justifyContent: 'center', marginTop: '0.85rem' }}
           disabled={!isAvailable}
           onClick={() => isAvailable && addItem(item)}
         >
-          {isAvailable ? '🛒 Agregar al carrito' : stock === 0 ? 'Agotado' : 'No disponible'}
+          {isAvailable
+            ? <><ShoppingCart size={16} /> Agregar al carrito</>
+            : stock === 0 ? 'Agotado' : 'No disponible'}
         </button>
       </div>
     </div>
@@ -97,7 +104,7 @@ export default function Home() {
       {/* Hero */}
       <section className="hero">
         <div className="hero__content">
-          <div className="hero__badge">🔥 Ofertas exclusivas</div>
+          <div className="hero__badge icon-inline"><Flame size={14} /> Ofertas exclusivas</div>
           <h1 className="hero__title">
             Tecnología que
             <br />
@@ -113,18 +120,18 @@ export default function Home() {
             tecnológicas al mejor precio. Envío rápido y soporte experto.
           </p>
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <a href="#products" className="btn btn-primary" style={{ fontSize: '1rem', padding: '0.85rem 2rem' }}
+            <a href="#products" className="btn btn-primary icon-inline" style={{ fontSize: '1rem', padding: '0.85rem 2rem' }}
                onClick={(e) => { e.preventDefault(); document.querySelector('.category-tabs')?.scrollIntoView({ behavior: 'smooth' }); }}>
-              🛒 Ver productos
+              <ShoppingCart size={18} /> Ver productos
             </a>
-            <button className="btn" style={{
+            <button className="btn icon-inline" style={{
               fontSize: '1rem', padding: '0.85rem 2rem',
               background: 'var(--glass-bg)',
               color: 'var(--text)',
               border: '1px solid var(--glass-border)',
               backdropFilter: 'blur(8px)',
             }}>
-              🎮 Gaming
+              <Gamepad2 size={18} /> Gaming
             </button>
           </div>
           <div style={{
@@ -135,10 +142,10 @@ export default function Home() {
             flexWrap: 'wrap',
           }}>
             {[
-              { icon: '🚚', text: 'Envío nacional' },
-              { icon: '🔒', text: 'Pago seguro' },
-              { icon: '💬', text: 'Soporte 24/7' },
-              { icon: '⭐', text: 'Garantía incluida' },
+              { icon: Truck, text: 'Envío nacional' },
+              { icon: Lock, text: 'Pago seguro' },
+              { icon: MessageCircle, text: 'Soporte 24/7' },
+              { icon: Star, text: 'Garantía incluida' },
             ].map((item) => (
               <div key={item.text} style={{
                 display: 'flex',
@@ -147,7 +154,7 @@ export default function Home() {
                 fontSize: '0.85rem',
                 color: 'var(--text-secondary)',
               }}>
-                <span style={{ fontSize: '1.2rem' }}>{item.icon}</span>
+                <item.icon size={19} />
                 <span>{item.text}</span>
               </div>
             ))}
@@ -178,7 +185,7 @@ export default function Home() {
       {error && <div className="error-message">{error}</div>}
 
       {loading ? (
-        <div className="loading">📦 Cargando productos…</div>
+        <div className="loading icon-inline"><Package size={18} /> Cargando productos…</div>
       ) : filtered.length === 0 ? (
         <div className="loading" style={{ padding: '4rem' }}>
           No hay productos en esta categoría

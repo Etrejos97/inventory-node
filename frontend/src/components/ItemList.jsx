@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Package, BarChart3, AlertTriangle, Ban, Pencil, Trash2 } from 'lucide-react';
 import { itemService, categoryService, statusService } from '../api/axiosConfig';
 
 const STATUS_BADGE = {
@@ -70,28 +71,28 @@ export default function ItemList({ onEdit, onRefresh }) {
       {/* Summary cards */}
       <div className="cards" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
         <div className="card">
-          <div className="card__icon" style={{ color: 'var(--neon-cyan)' }}>📦</div>
+          <div className="card__icon" style={{ color: 'var(--neon-cyan)' }}><Package size={24} /></div>
           <div className="card__body">
             <div className="card__value">{items.length}</div>
             <div className="card__label">Productos</div>
           </div>
         </div>
         <div className="card">
-          <div className="card__icon" style={{ color: 'var(--neon-cyan)' }}>📊</div>
+          <div className="card__icon" style={{ color: 'var(--neon-cyan)' }}><BarChart3 size={24} /></div>
           <div className="card__body">
             <div className="card__value">{totalStock}</div>
             <div className="card__label">Stock total</div>
           </div>
         </div>
         <div className="card">
-          <div className="card__icon" style={{ color: 'var(--neon-orange)' }}>⚠️</div>
+          <div className="card__icon" style={{ color: 'var(--neon-orange)' }}><AlertTriangle size={24} /></div>
           <div className="card__body">
             <div className="card__value">{lowStockItems.length}</div>
             <div className="card__label">Stock bajo</div>
           </div>
         </div>
         <div className="card">
-          <div className="card__icon" style={{ color: 'var(--neon-pink)' }}>🚫</div>
+          <div className="card__icon" style={{ color: 'var(--neon-pink)' }}><Ban size={24} /></div>
           <div className="card__body">
             <div className="card__value">{outOfStock.length}</div>
             <div className="card__label">Sin stock</div>
@@ -182,8 +183,8 @@ export default function ItemList({ onEdit, onRefresh }) {
                       <td style={{ color: 'var(--text-muted)' }}>{item.minStock ?? 0}</td>
                       <td>{formatCurrency(item.purchaseValue)}</td>
                       <td>
-                        <button className="btn-icon" title="Editar" onClick={() => onEdit(item)}>✏️</button>
-                        <button className="btn-icon" title="Eliminar" onClick={() => handleDelete(item.id, item.name)}>🗑️</button>
+                        <button className="btn-icon" title="Editar" onClick={() => onEdit(item)}><Pencil size={16} /></button>
+                        <button className="btn-icon" title="Eliminar" onClick={() => handleDelete(item.id, item.name)}><Trash2 size={16} /></button>
                       </td>
                     </tr>
                   );

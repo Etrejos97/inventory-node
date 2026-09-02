@@ -483,6 +483,14 @@ tbody tr:hover {
   transition: all var(--transition);
   line-height: 1;
   color: var(--text-muted);
+  display: inline-flex;
+  align-items: center;
+}
+
+.icon-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 
 .btn-icon:hover {
