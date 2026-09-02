@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { userSchema } from "@/lib/validators/user";
-import { jsonOk, jsonNoContent, notFound, fromZodError } from "@/lib/http";
+import { jsonOk, jsonNoContent, notFound, fromZodError, fromPrismaError } from "@/lib/http";
 import { toUserResponse } from "@/lib/mappers";
 
 type RouteParams = { params: Promise<{ id: string }> };
@@ -35,12 +35,16 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
   const password = data.password != null && data.password.trim() !== "" ? data.password : existing.password;
   const isActive = data.isActive ?? existing.isActive;
 
-  const user = await prisma.user.update({
-    where: { id: Number(id) },
-    data: { username: data.username, password, fullName: data.fullName, email: data.email, roleId, isActive },
-    include: { role: true },
-  });
-  return jsonOk(toUserResponse(user));
+  try {
+    const user = await prisma.user.update({
+      where: { id: Number(id) },
+      data: { username: data.username, password, fullName: data.fullName, email: data.email, roleId, isActive },
+      include: { role: true },
+    });
+    return jsonOk(toUserResponse(user));
+  } catch (error) {
+    return fromPrismaError(error, { duplicate: `Ya existe un usuario con username: ${data.username}` });
+  }
 }
 
 export async function DELETE(_request: NextRequest, { params }: RouteParams) {

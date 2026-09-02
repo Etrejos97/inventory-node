@@ -28,6 +28,24 @@ como plantilla). También completé el `README.md` (stack, estructura, tabla
 de los 19 endpoints) y agregué `docs/arquitectura.md` con el diagrama de
 capas real, extraído del grafo indexado.
 
+Verifiqué contra el código (no contra lo que decía la documentación) que
+los 15 puntos de escritura del backend tocan un solo modelo Prisma por
+request, así que ninguno necesita `prisma.$transaction` hoy — actualicé
+`docs/DEUDA.md` con esa comprobación.
+
+Cubrí el 500 crudo que salía al mandar un username/nombre/número de serie
+duplicado, o al borrar una categoría/estado con items asociados: agregué
+`conflict()` y `fromPrismaError()` en `lib/http.ts` y envolví los 10
+puntos de escritura afectados (`users`, `categories`, `statuses`, `items`)
+en try/catch. Verifiqué el alcance exacto contra el schema real
+(`prisma/schema.prisma` + la migración aplicada) y contra el Java
+original (`UserService`, `CategoryService` — tampoco pre-validan
+duplicados, y no hay `@ExceptionHandler` en todo el proyecto), así que es
+una desviación consciente del original, documentada en el ADR
+`docs/decisiones/2026-09-02 — 409 en duplicados y en deletes bloqueados por FK.md`.
+Probé los tres casos con el server real levantado (duplicado, delete
+bloqueado, happy path) antes de dar el cambio por bueno.
+
 ## Próximos pasos
 
 1. Testing: lo dejo en pausa hasta que el profesor indique el enfoque a
@@ -67,4 +85,4 @@ Ninguno.
 ## Estado git
 
 Repo con remoto en GitHub (`origin` → `github.com/Etrejos97/inventory-node`,
-público), rama `main`, 1 commit.
+público), rama `main`.

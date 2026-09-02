@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { catalogSchema } from "@/lib/validators/catalog";
-import { jsonOk, jsonNoContent, notFound, fromZodError } from "@/lib/http";
+import { jsonOk, jsonNoContent, notFound, fromZodError, fromPrismaError } from "@/lib/http";
 
 type RouteParams = { params: Promise<{ id: string }> };
 
@@ -20,8 +20,12 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
   const exists = await prisma.status.findUnique({ where: { id: Number(id) } });
   if (!exists) return notFound(`Estado no encontrado: ${id}`);
 
-  const status = await prisma.status.update({ where: { id: Number(id) }, data: parsed.data });
-  return jsonOk(status);
+  try {
+    const status = await prisma.status.update({ where: { id: Number(id) }, data: parsed.data });
+    return jsonOk(status);
+  } catch (error) {
+    return fromPrismaError(error, { duplicate: `Ya existe un estado con nombre: ${parsed.data.name}` });
+  }
 }
 
 export async function DELETE(_request: NextRequest, { params }: RouteParams) {
@@ -29,6 +33,12 @@ export async function DELETE(_request: NextRequest, { params }: RouteParams) {
   const exists = await prisma.status.findUnique({ where: { id: Number(id) } });
   if (!exists) return notFound(`Estado no encontrado: ${id}`);
 
-  await prisma.status.delete({ where: { id: Number(id) } });
-  return jsonNoContent();
+  try {
+    await prisma.status.delete({ where: { id: Number(id) } });
+    return jsonNoContent();
+  } catch (error) {
+    return fromPrismaError(error, {
+      restrict: `No se puede eliminar el estado "${exists.name}": tiene ítems asociados.`,
+    });
+  }
 }

@@ -60,3 +60,18 @@ en los ocho grupos de endpoints) y cada uno toca un solo modelo por
 request — ninguno necesita `prisma.$transaction` hoy. Si en algún momento
 agrego un endpoint que escriba en más de una tabla a la vez (por ejemplo,
 mover stock entre dos items), ahí sí hace falta envolver la operación.
+
+## 500 crudo en duplicados y en deletes bloqueados por FK — resuelto
+
+`POST`/`PUT` de `users`, `categories`, `statuses` e `items` (duplicado de
+`username`/`name`/`serialNumber`) y `DELETE` de `categories`/`statuses`
+con items asociados dejaban propagar la excepción de integridad de Prisma
+sin capturar, resultando en un 500 genérico — igual que el original Java,
+que tampoco la maneja. Lo cubrí con un 409 explícito (`conflict()` /
+`fromPrismaError()` en `lib/http.ts`). Es una desviación consciente del
+comportamiento del original, documentada en
+`docs/decisiones/2026-09-02 — 409 en duplicados y en deletes bloqueados por FK.md`
+— no una corrección silenciosa.
+
+**Ubicación**: `lib/http.ts`, y los 10 handlers `create`/`update`/`delete`
+listados en el ADR.

@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { itemSchema } from "@/lib/validators/item";
-import { jsonOk, jsonNoContent, notFound, fromZodError } from "@/lib/http";
+import { jsonOk, jsonNoContent, notFound, fromZodError, fromPrismaError } from "@/lib/http";
 import { toItemResponse } from "@/lib/mappers";
 
 const includeRelations = { category: true, status: true, responsible: true } as const;
@@ -35,25 +35,29 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     if (!responsible) return notFound(`Responsable no encontrado: ${data.responsibleId}`);
   }
 
-  const item = await prisma.item.update({
-    where: { id: Number(id) },
-    data: {
-      name: data.name,
-      description: data.description,
-      serialNumber: data.serialNumber,
-      categoryId: data.categoryId,
-      statusId: data.statusId,
-      responsibleId: data.responsibleId ?? null,
-      acquisitionDate: data.acquisitionDate ? new Date(data.acquisitionDate) : null,
-      location: data.location,
-      purchaseValue: data.purchaseValue,
-      observations: data.observations,
-      stock: data.stock ?? 0,
-      minStock: data.minStock ?? 0,
-    },
-    include: includeRelations,
-  });
-  return jsonOk(toItemResponse(item));
+  try {
+    const item = await prisma.item.update({
+      where: { id: Number(id) },
+      data: {
+        name: data.name,
+        description: data.description,
+        serialNumber: data.serialNumber,
+        categoryId: data.categoryId,
+        statusId: data.statusId,
+        responsibleId: data.responsibleId ?? null,
+        acquisitionDate: data.acquisitionDate ? new Date(data.acquisitionDate) : null,
+        location: data.location,
+        purchaseValue: data.purchaseValue,
+        observations: data.observations,
+        stock: data.stock ?? 0,
+        minStock: data.minStock ?? 0,
+      },
+      include: includeRelations,
+    });
+    return jsonOk(toItemResponse(item));
+  } catch (error) {
+    return fromPrismaError(error, { duplicate: `Ya existe un ítem con número de serie: ${data.serialNumber}` });
+  }
 }
 
 export async function DELETE(_request: NextRequest, { params }: RouteParams) {

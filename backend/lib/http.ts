@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import type { Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import type { ZodError } from "zod";
 
 function pad(n: number): string {
@@ -70,4 +70,29 @@ export function fromZodError(error: ZodError, message = "Solicitud inválida") {
     message: issue.message,
   }));
   return badRequest(message, errors);
+}
+
+export function conflict(message: string) {
+  return NextResponse.json({ message }, { status: 409 });
+}
+
+/**
+ * Traduce P2002 (unique constraint) y P2003 (FK restringida en un delete)
+ * a un 409 con mensaje claro. El original Java tampoco maneja estas
+ * excepciones (no hay @ExceptionHandler en el proyecto) — cualquier otro
+ * código de PrismaClientKnownRequestError, o cualquier otro tipo de error,
+ * se relanza tal cual y sigue cayendo en el 500 sin manejar de siempre.
+ * Ver docs/decisiones/2026-09-02 — 409 en duplicados y en deletes
+ * bloqueados por FK.md.
+ */
+export function fromPrismaError(error: unknown, messages: { duplicate?: string; restrict?: string } = {}) {
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    if (error.code === "P2002") {
+      return conflict(messages.duplicate ?? "Ya existe un registro con ese valor.");
+    }
+    if (error.code === "P2003") {
+      return conflict(messages.restrict ?? "No se puede eliminar: hay registros asociados.");
+    }
+  }
+  throw error;
 }
